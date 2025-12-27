@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Kirish{% endblock title %}
+
+{% block content %}
+<h2>saytga kirish</h2>  
+<form action="" method="post">
+
+
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit">kirish</button>
+
+
+</form>
+
+{% endblock content %}

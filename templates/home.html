@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} Bosh sahifa{% endblock title %}
+{% block content %}
+
+{% if user.is_authenticated %}
+ {{user.username}}
+{% else %}
+
+
+
+<p>saytga kirmagansiz</p>
+<a href="{% url 'login' %}">saytga kirish</a>
+<a href="{% url 'signup' %}">Ro'yxatdan o'tish</a>
+
+{% endif %}
+{% endblock content %}
