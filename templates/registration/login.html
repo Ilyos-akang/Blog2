@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{%  load crispy_forms_tags %}
 {% block title %}Kirish{% endblock title %}
 
 {% block content %}
@@ -8,8 +8,9 @@
 
 
 {% csrf_token %}
-{{ form.as_p }}
+{{ form|crispy }}
 <button type="submit">kirish</button>
+<a href="{% url 'password_reset' %}" role="button" >kalit so'zni o'zgartirish</a>
 
 
 </form>

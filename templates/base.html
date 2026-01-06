@@ -32,7 +32,7 @@
                         <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Bosh sahifa</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">sayt xaritasi</a>
+                        <a class="nav-link" href="{% url 'password_change' %}">parolni almashtirish</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -64,7 +64,7 @@
     </nav>
 
     <div class="container my-5">
-        <h1>Hello, world!</h1>
+        <h1> Salom {{user.username}} !</h1>
 
     </div>
 
