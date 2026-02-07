@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{%  if object.photo %}
+<img src="{{ object.photo.url }}" alt="{{ object.title }}">
+{% endif %}
+
+<h1>{{ object.title }}</h1>
+
+<h5>  MUallif : {{ object.author }} | {{ object.date }} </h5>
+
+<div><p> {{ object.body | safe }}  </p></div>
+
+<div><a href="{% url 'article_edit' object.pk  %}">Tahrirlash</a></div>
+<div><a href="{% url 'article_delete' object.pk %}">O'chirish</a></div>
+<div>
+<a href="{% url 'article_list'  %}">Barcha postlar</a>
+</div>
+
+
+
+{% endblock content %}

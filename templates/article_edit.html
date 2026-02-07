@@ -1,0 +1,34 @@
+
+
+<!-- ======================= article_edit.html ======================= -->
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Postni tahrirlash {% endblock title %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+
+        <div class="card card-custom p-4">
+            <h2 class="mb-4 text-center">✏️ Postni tahrirlash</h2>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {{ form|crispy }}
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'home' %}" class="btn btn-secondary">⬅️ Ortga</a>
+                    <button type="submit" class="btn btn-primary">💾 Saqlash</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}
+
+print('salom')
