@@ -178,12 +178,3 @@ CKEDITOR_CONFIGS = {
 
 CKEDITOR_UPLOAD_PATH = "uploads/"   # Images will be uploaded to MEDIA_ROOT/uploads/
 CREDITOR_RESTRICT_BY_USER=True
-
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-    },
-}
