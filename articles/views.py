@@ -3,7 +3,7 @@ from django.views.generic import ListView , DetailView
 from django.views.generic.edit import UpdateView,DeleteView,CreateView
 from django.urls import reverse_lazy
 from .models import Article 
-
+from .forms import ArticleForm
 
 
 class ArticleViewList(LoginRequiredMixin,ListView):
@@ -20,7 +20,7 @@ class ArticDetailleView(LoginRequiredMixin, DetailView):
 
 class ArticUpdateleView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     model=Article
-    fields=('title','sumary','body','photo')
+    form_class=ArticleForm
     template_name='article_edit.html'
 
     def test_func(self):

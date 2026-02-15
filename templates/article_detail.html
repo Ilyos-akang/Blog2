@@ -17,6 +17,24 @@
 <a href="{% url 'article_list'  %}">Barcha postlar</a>
 </div>
 
+<div>
+    <p>Izohlar</p>
+    <div>
+        {% for comment in article.comments.all %}
+
+            <div>
+                <blockquote>
+                    <p>{{ comment }}</p>
+                
+                    <footer> {{ comment.author }} </footer>
+
+                </blockquote>
+            </div>
+            {% endfor %}
+    </div>
+
+</div>
+
 
 
 {% endblock content %}

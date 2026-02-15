@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from environs import Env
+
+env=Env()
+env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-2xlc+p-(#klgup$##p4ijxi0u8yid_*t2jvn^2h2a$_p*^dl5v'
+SECRET_KEY = env.str('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool("DEBUG",default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -36,9 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     # tashqi app
     'crispy_forms',
+    'ckeditor',
+    'ckeditor_uploader',
     # yaratilgan app
     'crispy_bootstrap5',
     'accounts',
@@ -49,6 +56,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -80,10 +88,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default':env.dj_db_url('DATABASE_URL')
 }
 
 
@@ -121,8 +126,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+
 EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
+
+import os
+ 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # Define STATIC_ROOT
+STATICFILES_DIRST=[str(BASE_DIR.joinpath('static'))]
+STATICFILES_STORAGE='whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+CKEDITOR_UPLOAD_PATH = "uploads/" # Images will be uploaded to MEDIA_ROOT/uploads/
 
 
 AUTH_USER_MODEL='accounts.CustomUser'
@@ -132,5 +149,33 @@ LOGOUT_REDIRECT_URL='home'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
-MEDIA_URL='/media/'
-MEDIA_ROOT=str(BASE_DIR.joinpath('media'))
+
+
+
+# CKEDITOR CONFIGS
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Full',
+    },
+}
+
+"""
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': 300,
+    },
+} """
+
+CKEDITOR_UPLOAD_PATH = "uploads/"   # Images will be uploaded to MEDIA_ROOT/uploads/
+CREDITOR_RESTRICT_BY_USER=True
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
