@@ -1,12 +1,12 @@
-{% extends 'base.html' %}
+    {% extends 'base.html' %}
 
-{% block content %}
-<h1>postni o'chirish</h1>
-<form method="post">
-{% csrf_token %}
-<p>Postni o'chirishni xoxolaysizmi</p>
-<button type="submit">ha</button>
+    {% block content %}
+    <h1>postni o'chirish</h1>
+    <form method="post">
+    {% csrf_token %}
+    <p>Postni o'chirishni xoxolaysizmi</p>
+    <button type="submit">ha</button>
 
-</form>
+    </form>
 
-{% endblock content %}
+    {% endblock content %}

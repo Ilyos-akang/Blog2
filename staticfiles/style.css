@@ -1,0 +1,69 @@
+/* Umumiy sahifa */
+body {
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Kontent joyi */
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 15px;
+}
+
+/* Har bir post */
+.article {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.article:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Sarlavha */
+.article h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 26px;
+}
+
+.article h2 a {
+    text-decoration: none;
+    color: #1e3a8a;
+}
+
+.article h2 a:hover {
+    color: #2563eb;
+}
+
+/* Rasm */
+.article img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+/* Qisqacha matn */
+.article .summary {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #444;
+}
+
+/* Muallif va sana */
+.article .meta {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #6b7280;
+}

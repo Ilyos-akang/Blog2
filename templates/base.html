@@ -1,172 +1,131 @@
-
-{%  load static %}
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="uz">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Blog2{% endblock %}</title>
 
-    <title>{% block title %} Blog2 {% endblock title %}</title>
+    <!-- To‘g‘ri Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- ckeditor -->
-
-{% block extrahead %}
-
-{{ block.super }}
-{% endblock %}
-
-
-    <!-- Custom style -->
     <style>
-        body {
-            background: #f5f7fa;
-            font-family: 'Inter', sans-serif;
+        body { 
+            background: #f8fafc; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 0.5px;
+        .navbar { background: #1a202c; padding: 0.8rem 0; }
+        .navbar-brand { font-weight: 700; font-size: 1.3rem; }
+
+        main { flex: 1; margin-top: 20px; }
+
+        .greeting-box { 
+            background: #fff; 
+            padding: 12px 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
         }
 
-        .card-custom {
-            border: none;
-            border-radius: 1.2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-            transition: 0.2s ease;
+        footer { 
+            background: #1a202c; 
+            color: #94a3b8; 
+            padding: 25px 0; 
+            font-size: 0.9rem; 
         }
 
-        .card-custom:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 14px 35px rgba(0, 0, 0, 0.08);
-        }
-
-        .btn-primary {
-            border-radius: 12px;
-            padding: 8px 20px;
-            font-weight: 500;
-        }
-
-        .search-input {
-            border-radius: 10px;
-        }
-
-        footer {
-            margin-top: 100px;
-            padding: 40px 0;
-            background: #111827;
-            color: #e5e7eb;
-        }
-
-        footer a {
-            color: #9ca3af;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            color: #fff;
+        footer a { 
+            color: #fff; 
+            text-decoration: none; 
+            margin: 0 10px; 
         }
     </style>
 </head>
-
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <div class="container">
+    <!-- ✅ Minimal Navbar -->
+    <nav class="navbar navbar-dark sticky-top shadow-sm">
+        <div class="container d-flex justify-content-between align-items-center">
+            
             <a class="navbar-brand" href="{% url 'home' %}">📝 Blog2</a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <div class="dropdown">
+                <button class="btn btn-sm btn-outline-light dropdown-toggle" data-bs-toggle="dropdown">
+                    ☰ Menu
+                </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Bosh sahifa</a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark border-0 shadow">
+
+                    <li><a class="dropdown-item" href="{% url 'home' %}">🏠 Asosiy</a></li>
+                    <li><a class="dropdown-item" href="{% url 'article_list' %}">📄 Postlar</a></li>
+
+                    <li><hr class="dropdown-divider"></li>
+
+                    {% if user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{% url 'article_new' %}">➕ Yangi post</a></li>
+                        <li><a class="dropdown-item" href="{% url 'edit_profile' %}">⚙️ Sozlamalar</a></li>
+                        <li><a class="dropdown-item" href="{% url 'password_change' %}">🔑 Parol</a></li>
+
+                        <li><hr class="dropdown-divider"></li>
+
+                        <li>
+                            <form action="{% url 'logout' %}" method="post" class="px-3">
+                                {% csrf_token %}
+                                <button class="btn btn-sm btn-danger w-100">Chiqish</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li><a class="dropdown-item" href="{% url 'login' %}">🔐 Kirish</a></li>
+                    {% endif %}
+
+                    <li><hr class="dropdown-divider"></li>
+
+                    <!-- 🔍 Qidiruv -->
+                    <li class="px-3 py-2">
+                        <form method="get" action="{% url 'article_list' %}">
+                            <input class="form-control form-control-sm mb-2" type="search" name="q" placeholder="Qidiruv...">
+                            <button class="btn btn-sm btn-primary w-100">Qidir</button>
+                        </form>
                     </li>
 
-                    <!-- POST LIST LINK -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'article_list' %}">Postlar</a>    article_list
-                    </li>
-
-
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            Profil
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{% url 'article_new' %}">➕ Post qo'shish</a></li>
-                            <li><a class="dropdown-item" href="#">⚙️ Accountni tahrirlash</a></li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'password_change' %}">Parolni almashtirish</a>
-                            </li>
-                        </ul>
-                    </li>
                 </ul>
-
-                <!-- SEARCH -->
-                <form class="d-flex me-3" method="get" action="{% url 'article_list' %}">
-                    <input class="form-control me-2 search-input" type="search" name="q"
-                        placeholder="Saytdan izlash...">
-                    <button class="btn btn-outline-light" type="submit">Qidiruv</button>
-                </form>
-
-                <!-- AUTH BUTTONS -->
-                {% if user.is_authenticated %}
-                <form action="{% url 'logout' %}" method="post">
-                    {% csrf_token %}
-                    <button class="btn btn-danger btn-sm" type="submit">Chiqish</button>
-                </form>
-                {% else %}
-                <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Kirish</a>
-                {% endif %}
             </div>
+
         </div>
     </nav>
 
+    <!-- 👋 Greeting -->
+    <div class="container mt-3">
+        {% if user.is_authenticated %}
+            <div class="greeting-box d-flex justify-content-between align-items-center">
+                <span>Salom, <strong>{{ user.username }}</strong> 👋</span>
+                <a href="{% url 'article_new' %}" class="btn btn-sm btn-primary">+ Post</a>
+            </div>
+        {% endif %}
 
-    <!-- GREETING -->
-    {% if user.is_authenticated %}
-    <div class="container mt-4">
-        <div class="alert alert-light shadow-sm rounded-4 d-flex justify-content-between align-items-center">
-            <h6 class="mb-0">Salom, <strong>{{ user.username }}</strong> 👋</h6>
-            <a href="{% url 'article_new' %}" class="btn btn-primary btn-sm">+ Yangi post</a>
-        </div>
+        <main>
+            {% block content %}{% endblock %}
+        </main>
     </div>
-    {% endif %}
 
-
-    <!-- MAIN CONTENT -->
-    <main class="container my-5">
-        {% block content %}
-        {% endblock content %}
-    </main>
-
-
-    <!-- FOOTER -->
+    <!-- 🔻 Footer -->
     <footer>
         <div class="container text-center">
-            <p class="mb-2">© 2026 Blog2. Barcha huquqlar himoyalangan.</p>
             <div class="mb-2">
-                <a href="{% url 'home' %}">Bosh sahifa</a> ·
+                <a href="{% url 'home' %}">Uy</a> | 
                 <a href="{% url 'article_list' %}">Postlar</a>
             </div>
-            <small>Django + Bootstrap bilan professional tarzda yaratilgan</small>
+            <p class="mb-0">© 2026 Blog2. Barcha huquqlar himoyalangan.</p>
         </div>
     </footer>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

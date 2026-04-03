@@ -11,6 +11,11 @@ environs = {extras = ["django"], version = "*"}
 psycopg2-binary = "*"
 whitenoise = "*"
 gunicorn = "*"
+django-allauth = "*"
+requests = "*"
+requests-oauthlib = "*"
+pyjwt = "*"
+cryptography = "*"
 
 [dev-packages]
 

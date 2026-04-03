@@ -52,18 +52,32 @@ INSTALLED_APPS = [
     'accounts',
     'pages',
     'articles',
+    #  google oath
+  
+ 
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google', 
+
+
 ]
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',     
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+
 ]
+
 
 ROOT_URLCONF = 'config.urls'
 
@@ -110,6 +124,27 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+    }
+}
+LOGIN_REDIRECT_URL = '/' # Tizimga kirgandan keyin yo'naltiriladigan sahifa
+
+# settings.py ichida bularni almashtiring:
+
+# Eski: ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_LOGIN_METHODS = {'email'}
+
+# Eski: ACCOUNT_EMAIL_REQUIRED = True
+# Eski: ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_EMAIL_REQUIRED = True # bu hali ham kerak bo'lishi mumkin, lekin yuqoridagi yangi format
 
 
 # Internationalization
@@ -128,7 +163,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 
-EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
 
 import os
  
@@ -144,9 +178,11 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.StaticFilesStorage", 
     },
 }
+
+
 
 CKEDITOR_UPLOAD_PATH = "uploads/" # Images will be uploaded to MEDIA_ROOT/uploads/
 
@@ -179,3 +215,20 @@ CKEDITOR_CONFIGS = {
 
 CKEDITOR_UPLOAD_PATH = "uploads/"   # Images will be uploaded to MEDIA_ROOT/uploads/
 CREDITOR_RESTRICT_BY_USER=True
+
+# SMTP sozlamalari (Haqiqiy email uchun)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com' # To'g'rilandi
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env.str('EMAIL_USER') 
+EMAIL_HOST_PASSWORD = env.str('EMAIL_PASSWORD') 
+DEFAULT_FROM_EMAIL = env.str('EMAIL_USER')
+
+# Allauth qo'shimcha sozlamalari
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none' # Parol emailga borishi uchun buni 'none' qilib turing, aks holda tasdiqlash xati ham boradi
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
+
